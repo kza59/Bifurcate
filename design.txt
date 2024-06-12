@@ -1,0 +1,29 @@
+Game Name:Bifurcate
+Game Type: 2d game with campaign and multiplayer gamemodes. Involves multiplayer gamemode. Game starts extremely simple however increases exponentially in complexity and content. 
+Katana Zero/ Dead cells/ Risk of Rain/ Realm of the Mad God/ Physics-based extremely smooth gameplay/ Looter-Shooter/ Roguelike/ tower-climbing system
+
+Layout:
+While(true) loop that continuously updates the game-state. There will be an entity class(player class, enemies class), Game class, Level/Map class, Projectile class, Item class, HUD class, SoundManager class, InputHandler class, and some sort of physics engine.
+
+//pseudocode
+while(true) {
+for(every event that happens) {
+
+if(event == quitGame) {
+stop running the game
+}
+
+//Render and draw the game objects
+
+//Timing (Limit to 120 frames per second)
+
+}
+
+
+
+
+
+
+}
+
+
