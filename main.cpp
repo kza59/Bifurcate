@@ -1,7 +1,10 @@
 #include <iostream>
-#include "Game.h"
+#include "include/Game.h"
 int main() {
-Game game;
-game.processEvent();
-return 0;
+// while(true) {
+//     processInput();
+//     update();
+//     render();
+// }
+
 }

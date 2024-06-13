@@ -1,0 +1,69 @@
+# start ssh agent
+eval "$(ssh-agent -s)"
+
+# give ssh key to agent
+ssh-add ~/.ssh/id_ed25519
+
+# go to repo directory
+cd \\wsl.localhost\Ubuntu\home\kza59\Bifurcate
+
+# verify remote url
+git remote -v
+
+git remote add origin git@github.com:kza59/lab3.git
+
+
+# set url
+git remote set-url origin git@github.com:kza59/Bifurcate.git
+
+# push changes
+git push -u origin master
+
+# after changing some files
+git add file1 file2...
+
+# lazy command
+git add .
+
+#commit changes
+git commit -m "Message about changes"
+
+#push
+git push origin master
+
+
+
+# branching : create new branch
+git branch new-branch
+
+# switch to the new branch
+git checkout new-branch
+
+
+# in one command:
+git checkout -b new-branch
+
+# to see all the branches
+git branch
+
+#to merge branches
+git checkout other-branch
+git merge new-branch
+
+#to delete branch
+git branch -d bad-branch
+
+
+#example workflow
+git checkout -b feature/new-thing
+git add .
+git commit -m "added new thing"
+git push origin feature/new-thing
+#go to github and create a pull request. If approved, merge the branch with main branch
+#or 
+git checkout master
+git merge feature/new-thing
+git push origin master
+git branch -d feature/new-thing
+git push origin --delete feature/new-thing
+
