@@ -1,0 +1,6 @@
+
+
+g++ main.cpp -o main -lsfml-graphics -lsfml-window -lsfml-system;./main
+g++ main.cpp Game.cpp -o main -lsfml-graphics -lsfml-window -lsfml-system;./main
+
+g++ physicsTest.cpp -o physicsTest -lsfml-graphics -lsfml-window -lsfml-system;./physicsTest

@@ -5,13 +5,15 @@
 #include <chrono>
 #include "include/Physics.h"
 #include "Entity.h"
-
+#include "HUD.h"
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 
 void test1() {
         std::vector<Body> bodies;
 
     Vector circleCenter(400, 300);
-    float circleRadius = 200.0f;
+    float circleRadius = 350.0f;
     int numBalls = 30;
     float ballRadius = 10.0f;
        float ballMass = 1.0f;
@@ -38,10 +40,11 @@ void run() {
     //generate a window
     sf::RenderWindow window(sf::VideoMode(1000, 1050), "Physics Engine Test");
     window.setPosition(sf::Vector2i(600,0));
+    // setUp();
     vector<Body> bodies;
     Vector circleCenter(400, 300);
-    float circleRadius = 200.0f;
-    int numBalls = 30;
+    float circleRadius = 400.0f;
+    int numBalls = 50;
     float ballRadius = 10.0f;
     float ballMass = 1.0f;
     // Circle of balls
@@ -56,7 +59,7 @@ void run() {
     // bodies.push_back(Body(Vector(100,100),Vector(0,500),1.0f));
     // bodies.push_back(Body(Vector(100,1000),Vector(0,-500),1.0f));
 
-        while (window.isOpen()) {
+    while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             switch(event.type) {
@@ -68,7 +71,7 @@ void run() {
                 continue;
             }
         }
-                window.clear();
+        window.clear();
         for (auto& body : bodies) {
             body.update(deltaTime);
         }

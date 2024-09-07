@@ -20,10 +20,32 @@ stop running the game
 }
 
 
-
-
-
-
 }
 
+GAME DESIGN PHILOSOPHY:
+In the game, everything that is able to take damage will be named an entity.
+These entities all have bodies.
+There will be game-caused effects on bodies, and player-caused effects on bodies.
+This means that even when the player is doing nothing, there will still be events occuring in the game.
+Whenever there is an input from the player, something will happen. That is, the event will be processed, and there may or may not be effects on different bodies.
 
+All bodies are assigned a name, along with various other characteristics.
+
+For example, if we have an entity, called Blob:
+
+Blob -> Entity -> Enemy -> Body -> Position : s
+                                -> Velocity : v
+                                -> Acceleration : a
+                                -> Mass : m
+                  Characteristics -> Name: Blob
+                                  -> Color: Green
+        Stats -----------> HP : 100
+                        -> HP regen :0.1
+                        -> Dex : 1
+                        -> Atk : 1
+                        -> Def : 1
+                        -> Spd : 0.5
+
+
+                              
+               
