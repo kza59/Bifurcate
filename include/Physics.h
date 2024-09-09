@@ -96,12 +96,39 @@ public:
         body1.velocity = body1.velocity + (impulse / body1.mass);
         body2.velocity = body2.velocity - (impulse / body2.mass);
     }
-    class Projectile
-    {
-    };
+
+
 };
 
+class Projectile { //Every projectile should have a damage value, a velocity, an acceleration, a position, a projectile sprite, and a mass
+public:
+    float projectileDamage;
+    // sf::Sprite projectileSprite;
+    sf::CircleShape projectileSprite;
+    sf::Vector2f acceleration;
+    sf::Vector2f velocity;
+    sf::Vector2f position;
+    float lifeTime;
+    float mass;
+    sf::Clock projClock;
 
+void speedUp(double factor) {
+    this->velocity.x *= factor;
+    this->velocity.y *= factor;
+}
+
+    void update(float changeInTime)
+    {
+        velocity.x += acceleration.x * changeInTime;
+        velocity.y += acceleration.y * changeInTime;
+        // position.x += velocity.x * changeInTime;
+        // position.y += velocity.y * changeInTime;
+        // acceleration = sf::Vector2f(0, 9.81f);
+        // acceleration.y
+    }
+    // Projectile() {
+    // }
+};
 
 inline bool checkCollision2(sf::Vector2f p1, sf::Vector2f p2, float r1, float r2) {
         sf::Vector2f diff = p2 - p1;

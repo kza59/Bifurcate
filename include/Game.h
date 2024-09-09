@@ -72,6 +72,8 @@ private:
     sf::Vector2f velocity;
     Body body;
     vector<Body> bodies;
+    Projectile projectile;
+    vector<Projectile> projectiles;
 
     // private functions
     void initVars();
@@ -110,6 +112,10 @@ public:
     void updateMousePos();
     void pollEvents();
     void openMenu();
+    void mainMenu();
+    void createDefaultProjectile(sf::Vector2f pos);
+    void updateProjectiles();
+    void renderProjectiles();
     bool inAir();
     bool onLadder();
     void createEnemy();
