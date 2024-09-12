@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "Physics.h"
+#include "GUI.h"
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
@@ -10,42 +11,7 @@
 #include <SFML/Network.hpp>
 
 using namespace std;
-class Button
-{
-public:
-    Button() {
 
-    }
-    Button(float x, float y, float width, float height, const sf::Font &font, const std::string &text)
-    {
-        button.setSize(sf::Vector2f(width, height));
-        button.setPosition(x, y);
-        button.setFillColor(sf::Color::Blue);
-
-        buttonText.setFont(font);
-        buttonText.setString(text);
-        buttonText.setCharacterSize(24);
-        buttonText.setFillColor(sf::Color::Blue);
-        buttonText.setPosition(
-            x + (width - buttonText.getLocalBounds().width)/2,
-            y + (height - buttonText.getLocalBounds().height)/2);
-    }
-
-    void draw(sf::RenderWindow &window)
-    {
-        window.draw(button);
-        window.draw(buttonText);
-    }
-
-    bool isClicked(const sf::Vector2i &mousePos)
-    {
-        return button.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos));
-    }
-
-private:
-    sf::RectangleShape button;
-    sf::Text buttonText;
-};
 
 class Game
 {
@@ -61,13 +27,14 @@ private:
     float jumpCD;
     float jumpTimer;
     bool isJumping;
-
+    bool inMenu;
     float Timer;
 
     // game objects
     Body enemy;
     // vector<sf::RectangleShape> enemies;
     vector<Body> enemies;
+    int playerOrient; //0:left 1:right
     Body player;
     sf::Vector2f velocity;
     Body body;
@@ -85,19 +52,22 @@ private:
     // sf::;
     sf::VideoMode videoMode;
     sf::Font font;
-    Button fullScreenButton;
     sf::CircleShape mouseCursor;
     sf::Text cursorPos;
     sf::Text playerPos;
     sf::Text playerHP;
     sf::Text stats;
     sf::Clock Clock;
+    Button testButton;
+    Menu menu;
+    OptionsMenu optionsMenu;
     // sf::Text currentScore;
     int currentScore;
 
 public:
     // constructor and destructor
     Game();
+    void openOptions();
     virtual ~Game();
     // checkers
     const bool running() const;
@@ -112,7 +82,11 @@ public:
     void updateMousePos();
     void pollEvents();
     void openMenu();
+    void openOptionsMenu();
     void mainMenu();
+    void createButton(string &Text, float length, float height, sf::Color color);
+    void updateButton();
+    void renderButton();
     void createDefaultProjectile(sf::Vector2f pos);
     void updateProjectiles();
     void renderProjectiles();
