@@ -3,7 +3,7 @@ CXXFLAGS = -Wall -std=c++11
 HEADERS = config.h 
 SFML_LIBS = -lsfml-graphics -lsfml-system -lsfml-window
 
-SRC = main.cpp Game.cpp
+SRC = main.cpp Game.cpp config.cpp
 
 OUT = main
 

@@ -47,6 +47,7 @@ private:
     void initWindow();
     void initEnemy();
     void initPlayer();
+    void reset();
     sf::RenderWindow *window;
     sf::Event e;
     // sf::;
@@ -91,7 +92,6 @@ public:
     void updateProjectiles();
     void renderProjectiles();
     bool inAir();
-    bool onLadder();
     void createEnemy();
     void updateEnemies();
     void renderEnemies();

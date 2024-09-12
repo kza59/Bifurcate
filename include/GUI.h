@@ -203,9 +203,6 @@ bool confirm(sf::RenderWindow& window, sf::Vector2f mousePos) {
     }
 }
 int updateMenu(sf::Vector2f mousePos, sf::RenderWindow& window, bool& cond) {
-    while(!sf::Mouse::isButtonPressed) {
-
-    }
 
 
     if(exitGame.isClicked(mousePos)) {

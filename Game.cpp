@@ -4,10 +4,10 @@
 #include "config.h"
 // #include "Global.h"
 
-void Game::initWindow()
+void Game::initWindow() //goal: initialize the window
 {
-    this->videoMode.height = 1000;
-    this->videoMode.width = 1000;
+    this->videoMode.height = 700;
+    this->videoMode.width = 700;
     this->window = new sf::RenderWindow(this->videoMode, "Game", sf::Style::Fullscreen);
     // this->window = new sf::RenderWindow(this->videoMode, "Game", sf::Style::Default);
 
@@ -16,7 +16,7 @@ void Game::initWindow()
     this->openMenu();
 }
 
-void Game::initVars()
+void Game::initVars() //goal: initializes all the variables and stuff
 {
 
     this->window = nullptr;
@@ -27,7 +27,7 @@ void Game::initVars()
     this->maxEnemies = 10;
     if (!this->font.loadFromFile("Fonts/times.ttf"))
     {
-    cout << "font loading failure" << endl;
+        cout << "font loading failure" << endl;
     }
     else
     {
@@ -58,7 +58,17 @@ void Game::initVars()
     this->playerHP.setFillColor(sf::Color::Red);
     this->playerHP.setCharacterSize(30);
     this->playerHP.setString(to_string(100));
+}
 
+void Game::initPlayer() //goal: initializes player
+{
+    this->player.bod.setPosition(10.f, 100.f);
+    this->player.bod.setSize(sf::Vector2f(100.f, 100.f));
+    this->player.bod.setScale(sf::Vector2f(0.5f, 0.5f));
+    this->player.bod.setFillColor(sf::Color::Cyan);
+    this->player.bod.setOutlineColor(sf::Color::White);
+    this->player.bod.setOutlineThickness(1.f);
+    this->player.acceleration = GRAVITY;
 }
 
 void Game::initEnemy()
@@ -71,64 +81,60 @@ void Game::initEnemy()
     this->enemy.bod.setOutlineThickness(1.f);
     this->enemy.acceleration = sf::Vector2f(-9.81f, 0.f);
 }
-
-void Game::initPlayer()
-{
-    this->player.bod.setPosition(10.f, 100.f);
-    this->player.bod.setSize(sf::Vector2f(100.f, 100.f));
-    this->player.bod.setScale(sf::Vector2f(0.5f, 0.5f));
-    this->player.bod.setFillColor(sf::Color::Cyan);
-    this->player.bod.setOutlineColor(sf::Color::White);
-    this->player.bod.setOutlineThickness(1.f);
-    this->player.acceleration = sf::Vector2f(0.f, 9.81f);
+void Game::reset() //goal: resets the entire game
+{ // goal: reset the game, clear the enemies vector, clear the player
+    this->projectiles.clear();
+    this->enemies.clear();
+    this->player.bod.setPosition(PLAYER_STARTING_POS);
+    this->player.acceleration = GRAVITY;
 }
 
-void Game::openMenu() //goal: opens the menu at the very beginning
+void Game::openMenu() // goal: opens the menu at the very beginning. This should reset all game objects
 {
-        this->inMenu = true;
-
+    this->inMenu = true;
+    this->reset();
     while (this->running() && this->inMenu)
     {
-    this->window->clear();
-    this->pollEvents();
-    this->renderMousePos();
-    this->updateMousePos();
-    this->menu.updateMenu(this->mouseCursor.getPosition(), *this->window, this->inMenu);
-    this->menu.drawMenu(*this->window);
-    this->menu.highlight(this->mouseCursor.getPosition());
-    this->window->display();
+        this->window->clear();
+        this->pollEvents();
+        this->renderMousePos();
+        this->updateMousePos();
+        this->menu.updateMenu(this->mouseCursor.getPosition(), *this->window, this->inMenu);
+        this->menu.drawMenu(*this->window);
+        this->menu.highlight(this->mouseCursor.getPosition());
+        this->window->display();
     }
 }
 
-void Game::openOptionsMenu() //goal : pause game and open the "paused game" menu
+void Game::openOptionsMenu() // goal: pause game and open the "paused game" menu
 {
-        this->inMenu = true;
-        int Menu = 0;
+    this->inMenu = true;
+    int Menu = 0;
 
     while (this->running() && this->inMenu)
     {
-    this->window->clear();
-    this->pollEvents();
-    this->renderMousePos();
-    this->updateMousePos();
-    Menu = this->optionsMenu.updateMenu(this->mouseCursor.getPosition(), *this->window, this->inMenu);
-    this->optionsMenu.drawMenu(*this->window);
+        this->window->clear();
+        this->pollEvents();
+        this->renderMousePos();
+        this->updateMousePos();
+        Menu = this->optionsMenu.updateMenu(this->mouseCursor.getPosition(), *this->window, this->inMenu);
+        this->optionsMenu.drawMenu(*this->window);
         this->optionsMenu.highlight(this->mouseCursor.getPosition());
 
-    this->window->display();
-    if(Menu == 1) {
-        // this->mainMenuConfirm();
-        this->openMenu();
-    }
+        this->window->display();
+        if (Menu == 1)
+        {
+            // this->mainMenuConfirm();
+            this->openMenu();
+        }
     }
 }
-void displayText(string& text, sf::RenderWindow& window) { //goal: display text on the window
 
+void Game::openOptions() //goal: opens video settings, audio settings, controls, etc...
+{
 }
-void Game::openOptions() {
-    
-}
-Game::Game()
+
+Game::Game() //default constructor for game, creates a game and initializes everything
 {
     this->initVars();
     this->initWindow();
@@ -136,12 +142,12 @@ Game::Game()
     this->initPlayer();
 }
 
-Game::~Game()
+Game::~Game() //destructor of game
 {
     delete this->window;
 }
 
-const bool Game::running() const
+const bool Game::running() const //checks that the game is running
 {
     return this->window->isOpen();
 }
@@ -150,166 +156,70 @@ float jumpTimer = 0.0f;
 
 void Game::pollEvents()
 {
-
-    // jumpCD = 10.0f;
-    jumpCD = 0.f;
-
-    bool isJumping = false;
-    /*
-    @return void
-    Polls the events
-    1. while the window is polling events, process events
-    Functionalities:
-    {
-    Close/Escape : closes the window
-    W/A/S/D : moves the character around accordingly
-
-    }
-    */
-    bool W, A, S, D, Spc;
-
     while (this->window->pollEvent(this->e))
-
     {
-        jumpTimer += 1.f;
-
-        // taking in events
         switch (this->e.type)
         {
         case sf::Event::Closed:
             this->window->close();
             break;
+
         case sf::Event::KeyPressed:
-
-            switch (e.key.code)
+            if (this->e.key.code == sf::Keyboard::Escape)
             {
-            case sf::Keyboard::Escape:
-                // this->window->close();
-                // cout << this->player.bod.getPosition().y << endl;
-                if(this->player.bod.getPosition() != sf::Vector2f(0,0)) {
-                this->openOptionsMenu(); // should only be able to open options menu once the game has started
-
+                if (this->player.bod.getPosition() != sf::Vector2f(0, 0))
+                {
+                    this->openOptionsMenu();
                 }
-
-                break;
-            // case sf::Keyboard::
-            default:
-                break;
             }
             break;
-        case sf::Event::Resized:
-            break;
-        case sf::Event::LostFocus:
-            break;
-        case sf::Event::GainedFocus:
-            break;
-        case sf::Event::TextEntered:
-            break;
-        case sf::Event::KeyReleased:
-            break;
-        case sf::Event::MouseWheelMoved:
-            break;
-        case sf::Event::MouseWheelScrolled:
-            break;
+
         case sf::Event::MouseButtonPressed:
-        switch(e.mouseButton.button) {
-                case sf::Mouse::Left:
-                if(this->playerOrient) {
+            if (this->e.mouseButton.button == sf::Mouse::Left)
+            {
                 this->createDefaultProjectile(this->player.bod.getPosition());
+            }
+            break;
 
-                }
-                else {
-                this->createDefaultProjectile(this->player.bod.getPosition());
-
-                }
-                break;
-                default:
-                    break;
-        }
-            break;
-        case sf::Event::MouseButtonReleased:
-            break;
-        case sf::Event::MouseMoved:
-            break;
-        case sf::Event::MouseLeft:
-            break;
-        case sf::Event::MouseEntered:
-            break;
-        case sf::Event::JoystickButtonPressed:
-            break;
-        case sf::Event::JoystickButtonReleased:
-            break;
-        case sf::Event::JoystickMoved:
-            break;
-        case sf::Event::JoystickConnected:
-            break;
-        case sf::Event::JoystickDisconnected:
-            break;
-        case sf::Event::TouchBegan:
-            break;
-        case sf::Event::TouchMoved:
-            break;
-        case sf::Event::TouchEnded:
-            break;
-        case sf::Event::SensorChanged:
-            break;
-        case sf::Event::Count:
+        default:
             break;
         }
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::F4))
-    {
-        this->window->close();
-    }
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
-        if (onLadder())
-        {
-            this->player.bod.move(sf::Vector2f(0.f, -5.f));
-        }
+        this->player.bod.move(sf::Vector2f(0.f, -5.f));
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    {
-            this->playerOrient = 0;
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        this->playerOrient = 0;
         this->player.bod.move(sf::Vector2f(-5.f, 0.f));
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
         this->player.bod.move(sf::Vector2f(0.f, 5.f));
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-            this->playerOrient = 1;
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        this->playerOrient = 1;
         this->player.bod.move(sf::Vector2f(5.f, 0.f));
     }
 
-    if (!inAir() && sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-    this->player.velocity.y = -20.f;
-    this->playerOrient = 0;
-    this->createDefaultProjectile(this->player.bod.getPosition());
+    if (!inAir() && sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    {
+        this->player.velocity.y = -20.f;
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            this->createDefaultProjectile(this->player.bod.getPosition());
+        }
+    }
 
-    }
-    else if (!inAir() && sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-    this->player.velocity.y = -20.f;
-    this->playerOrient = 1;
-    this->createDefaultProjectile(this->player.bod.getPosition());
-
-    }
-    else if (!inAir() && sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::F4))
     {
-        this->player.velocity.y = -20.f;
-        // this->player.bod.move(sf::Vector2f(5.f, 0.f));
-    }
-    else if (!inAir() && sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-    {
-        this->player.velocity.y = -20.f;
-        // this->player.bod.move(sf::Vector2f(-5.f, 0.f));
-    }
-    else if (!inAir() && sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-    {
-        this->player.velocity.y = -20.f;
+        this->window->close();
     }
 }
 
@@ -318,21 +228,18 @@ bool Game::inAir()
     return this->player.velocity.y != 0;
 }
 
-bool Game::onLadder()
-{
-    return false;
-}
-
 void Game::createDefaultProjectile(sf::Vector2f pos)
 {
     // Purpose: creates a projectile originating at the given location.
     this->projectile.projectileSprite.setFillColor(sf::Color::Magenta);
     this->projectile.projectileSprite.setPosition(pos);
-    if(this->playerOrient == 1) {
-    this->projectile.velocity = sf::Vector2f(5.f,0.f);
+    if (this->playerOrient == 1)
+    {
+        this->projectile.velocity = sf::Vector2f(5.f, 0.f);
     }
-    else {
-    this->projectile.velocity = sf::Vector2f(-5.f,0.f);
+    else
+    {
+        this->projectile.velocity = sf::Vector2f(-5.f, 0.f);
     }
 
     this->projectile.acceleration = sf::Vector2f(0.f, 0.f);
@@ -394,7 +301,8 @@ void Game::updateProjectiles()
                 auto &enemy = *it2;
                 if (checkCollision2(item.projectileSprite.getPosition(), enemy.bod.getPosition(), item.projectileSprite.getRadius(), enemy.bod.getSize().x))
                 {
-                    cout << "\nhit\n" << endl;
+                    cout << "\nhit\n"
+                         << endl;
                     cout << item.lifeTime << endl;
                     hitEnemy = true;
                     it2 = this->enemies.erase(it2);
@@ -459,22 +367,6 @@ void Game::createEnemy()
 void Game::mainMenu()
 {
     // Purpose: return to the main menu
-}
-
-void Game::createButton(string &Text, float length, float height, sf::Color color) {
-
-}
-
-// void Game::destroyButton() {
-
-// }
-
-void Game::updateButton() {
-    
-}
-
-void Game::renderButton() {
-
 }
 
 void Game::updateEnemies()
@@ -666,6 +558,8 @@ void Game::renderPlayer()
     this->window->draw(this->player.bod);
 }
 
+
+
 void Game::update()
 {
     /*
@@ -679,6 +573,7 @@ void Game::update()
     this->updateEnemies();
     this->updateStats();
     this->updateProjectiles();
+    // this->updateLevel();
 }
 
 void Game::render()
